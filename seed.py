@@ -10,26 +10,16 @@ pw = os.environ.get("pw")
 
 file = r"C:\Users\bkrause\Desktop\Data101\SeedData.csv"
 columns = [
-    'Voucher #',
-    'Date',
-    'Vendor',
-    'Ref #',
-    'Line',
-    'Item ID',
-    'Description',
-    'Quantity',
-    'U/M',
-    'Price',
-    'Tax',
-    'Amount',
-    'Taxes',
-    'Total base',
-    'Account',
-    'Group',
-    'Tag',
-    'Memo',
-    'Comments',
-    'Approvers',
+    'Voucher #','Date',
+    'Vendor', 'Ref #',
+    'Line',  'Item ID',
+    'Description', 'Quantity',
+    'U/M',  'Price',
+    'Tax', 'Amount',
+    'Taxes', 'Total base',
+    'Account','Group',
+    'Tag', 'Memo',
+    'Comments', 'Approvers',
     'Approval Status'
 ]
 
@@ -58,7 +48,6 @@ df['Approvers'].fillna("No", inplace=True)
 Item = df['ItemID'].unique()
 Account = df['Account'].unique()
 Group = df['Group'].unique()
-Tag = df['Tag'].unique()
 df['Name'] = df.Approvers.str.replace('[^a-zA-Z]', '')
 df['Name'] = df['Name'].map(
     lambda x: x.rstrip('pending').rstrip('reject'))
@@ -74,14 +63,26 @@ appCondition = [
     df['Name'].str.contains(r'DavidRevolorio', na=False),
     df['Name'].str.contains(r'RobertOrtega', na=False),
     df['Name'].str.contains(r'No', na=False)]
-
+df['Location'] = np.select(appCondition, appChoice, default='None')
 
 Approvers = df['Name'].unique()
-
-print(Approvers)
 ALoc2 = pd.DataFrame(Approvers, columns=['Name'])
-ALoc2['Location'] = np.select(appCondition, appChoice, default='NA')
-print(ALoc2)
+
+
+
+tagChoice= [
+    'Cerritos', 'Fullerton', 'Rancho', 'Rancho', 'Downey'
+]
+tagCondition = [
+    df['Tag'].str.contains(r'16107 - Location - 16107 Commerce Way - Cerritos', na=False),
+    df['Tag'].str.contains(r'210 - Location - 210 E. Lambert Road', na=False),
+    df['Tag'].str.contains(r'9278-2 - Location-9278 Charles Smith Ave.-Rancho Cucamonga', na=False),
+    df['Tag'].str.contains(r'11937-2 - Total - 11937 Woodruff - Downey', na=False),
+    df['Tag'].str.contains(r'11937 - Westset - 11937 Woodruff Ave. - Downey', na=False)]
+df['TagLocation'] = np.select(tagCondition, tagChoice, default='None')
+
+print(df['TagLocation'].unique())
+tag = df['TagLocation'].unique()
 # print(Item)
 # database_connection = create_engine(f'mysql://root:{pw}@localhost/{db}')
 # df.to_sql(con=database_connection,
