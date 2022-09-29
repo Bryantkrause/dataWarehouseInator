@@ -90,7 +90,7 @@ df['TagLocation'] = np.select(tagCondition, tagChoice, default='None')
 
 print(df['TagLocation'].unique())
 tag = df['TagLocation'].unique()
-tagloc = pd.DataFrame(Approvers, columns=['TagLocation'])
+tagloc = pd.DataFrame(tag, columns=['TagLocation'])
 # print(Item)
 engine = create_engine(f'mysql://root:{pw}@localhost/{db}')
 df.to_sql(con=engine, name='rawdata', if_exists='replace', index=False)
@@ -98,7 +98,13 @@ with engine.connect() as con:
     con.execute(
         "ALTER TABLE rawdata ADD PRIMARY KEY (CoolId(75))")
 
-# tagloc.to_sql(con=engine,
-#           name='tag', if_exists='replace')
-# ALoc2.to_sql(con=engine,
-#            name='tag', if_exists='replace')
+tagloc.to_sql(con=engine,
+              name='tagloc', if_exists='replace')
+with engine.connect() as con:
+    con.execute(
+        "ALTER TABLE tagloc ADD PRIMARY KEY (tagLocation(75))")
+ALoc2.to_sql(con=engine,
+           name='aloc', if_exists='replace')
+with engine.connect() as con:
+    con.execute(
+        "ALTER TABLE aloc ADD PRIMARY KEY (name(75))")
