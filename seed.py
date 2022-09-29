@@ -8,7 +8,9 @@ import numpy as np
 db = os.environ.get("database")
 pw = os.environ.get("pw")
 
+# file location for seed data
 file = r"C:\Users\bkrause\Desktop\Data101\SeedData.csv"
+# set useful columns to keep
 columns = [
     'Voucher #','Date',
     'Vendor', 'Ref #',
@@ -25,6 +27,7 @@ columns = [
 
 df = pd.read_csv(file, usecols=columns, parse_dates=["Date"])
 
+# remove special characters and spaces from column names
 df.rename(columns={
     'Voucher #': 'Voucher',
     'Ref #': 'PurchaseOrder',
@@ -34,14 +37,15 @@ df.rename(columns={
     'Approval Status': 'ApprovalStatus'},
     inplace=True)
 
-
+# assign empty data based on specific column
 df['Unit'].fillna("Blank", inplace=True)
 df['Taxes'].fillna("0.0", inplace=True)
 df['Memo'].fillna("0.0", inplace=True)
 df['Comments'].fillna("0.0", inplace=True)
 df['PurchaseOrder'].fillna("0.0", inplace=True)
-df['PrimaryKey'] = df['Voucher'] + df['Vendor'] + df['Line'].astype(str)
-df.set_index('PrimaryKey')
+df['CoolId'] = df['Voucher'] + df['Vendor'] + df['Line'].astype(str)
+# # df = df.set_index('UniqueId')
+
 df['Approvers'].fillna("No", inplace=True)
 
 
@@ -52,6 +56,9 @@ df['Name'] = df.Approvers.str.replace('[^a-zA-Z]', '')
 df['Name'] = df['Name'].map(
     lambda x: x.rstrip('pending').rstrip('reject'))
 
+# location is theoretically based on tag however for vehicles a vehicle tag is used so in order to figure out location you have to look at multiple columns of data
+# this is an attempt at removing the guess work
+# get location data based on approver
 appChoice = ['Cerritos', 'Rancho', 'Fullerton',
              'Downey', 'Rancho', 'Rancho', 'Rancho','None']
 appCondition = [
@@ -69,7 +76,7 @@ Approvers = df['Name'].unique()
 ALoc2 = pd.DataFrame(Approvers, columns=['Name'])
 
 
-
+# get locaiton data based on tag system
 tagChoice= [
     'Cerritos', 'Fullerton', 'Rancho', 'Rancho', 'Downey'
 ]
@@ -83,7 +90,15 @@ df['TagLocation'] = np.select(tagCondition, tagChoice, default='None')
 
 print(df['TagLocation'].unique())
 tag = df['TagLocation'].unique()
+tagloc = pd.DataFrame(Approvers, columns=['TagLocation'])
 # print(Item)
-# database_connection = create_engine(f'mysql://root:{pw}@localhost/{db}')
-# df.to_sql(con=database_connection,
-#           name='rawdata', if_exists='replace')
+engine = create_engine(f'mysql://root:{pw}@localhost/{db}')
+df.to_sql(con=engine, name='rawdata', if_exists='replace', index=False)
+with engine.connect() as con:
+    con.execute(
+        "ALTER TABLE rawdata ADD PRIMARY KEY (CoolId(75))")
+
+# tagloc.to_sql(con=engine,
+#           name='tag', if_exists='replace')
+# ALoc2.to_sql(con=engine,
+#            name='tag', if_exists='replace')
