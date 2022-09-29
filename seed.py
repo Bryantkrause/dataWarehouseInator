@@ -51,46 +51,35 @@ df['Memo'].fillna("0.0", inplace=True)
 df['Comments'].fillna("0.0", inplace=True)
 df['PurchaseOrder'].fillna("0.0", inplace=True)
 df['PrimaryKey'] = df['Voucher'] + df['Vendor'] + df['Line'].astype(str)
+df.set_index('PrimaryKey')
 df['Approvers'].fillna("No", inplace=True)
-print(df['Approvers'].unique())
+
 
 Item = df['ItemID'].unique()
 Account = df['Account'].unique()
 Group = df['Group'].unique()
 Tag = df['Tag'].unique()
-df['Approvers'] = df.Approvers.str.replace('[^a-zA-Z]', '')
-df['Approvers'] = df['Approvers'].map(
+df['Name'] = df.Approvers.str.replace('[^a-zA-Z]', '')
+df['Name'] = df['Name'].map(
     lambda x: x.rstrip('pending').rstrip('reject'))
 
-Approvers = df['Approvers'].unique()
-print(Approvers)
-ALoc2 = pd.DataFrame(Approvers, columns=['Name'])
-# for col in ALoc.columns:
-#     print(col)
-# ALoc.rename(columns={0: 'Name'},inplace=True)
-# for col in ALoc.columns:
-#     print(col)
-# ALoc['length'] = ALoc['Name'].str.len()
-# print(ALoc)
-# print(ALoc.sort_values(by=['Name']))
-# mask = ALoc['length'] > 6
-# ALoc2 = ALoc.loc[mask]
-# ALoc2['Name'].fillna("0", inplace=True)
-print(ALoc2)
 appChoice = ['Cerritos', 'Rancho', 'Fullerton',
              'Downey', 'Rancho', 'Rancho', 'Rancho','None']
 appCondition = [
-    ALoc2['Name'].str.contains(r'FrankGuzma', na=False),
-    ALoc2['Name'].str.contains(r'CarlosGarcia', na=False),
-    ALoc2['Name'].str.contains(r'LuisSerrano', na=False),
-    ALoc2['Name'].str.contains(r'HenryValdez', na=False),
-    ALoc2['Name'].str.contains(r'DerekFranco', na=False),
-    ALoc2['Name'].str.contains(r'DavidRevolorio', na=False),
-    ALoc2['Name'].str.contains(r'RobertOrtega', na=False),
-    ALoc2['Name'].str.contains(r'No', na=False)]
+    df['Name'].str.contains(r'FrankGuzma', na=False),
+    df['Name'].str.contains(r'CarlosGarcia', na=False),
+    df['Name'].str.contains(r'LuisSerrano', na=False),
+    df['Name'].str.contains(r'HenryValdez', na=False),
+    df['Name'].str.contains(r'DerekFranco', na=False),
+    df['Name'].str.contains(r'DavidRevolorio', na=False),
+    df['Name'].str.contains(r'RobertOrtega', na=False),
+    df['Name'].str.contains(r'No', na=False)]
 
-print(appCondition)
-print(appChoice)
+
+Approvers = df['Name'].unique()
+
+print(Approvers)
+ALoc2 = pd.DataFrame(Approvers, columns=['Name'])
 ALoc2['Location'] = np.select(appCondition, appChoice, default='NA')
 print(ALoc2)
 # print(Item)
