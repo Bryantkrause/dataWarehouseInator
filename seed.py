@@ -7,10 +7,16 @@ import numpy as np
 
 db = os.environ.get("database")
 pw = os.environ.get("pw")
-
+wfh = os.environ.get("location")
 # file location for seed data
-file = r'C:\Users\bryan\Downloads\SeedData.csv'
+# file = r'C:\Users\bryan\Downloads\SeedData.csv'
 # file = r"C:\Users\bkrause\Desktop\Data101\SeedData.csv"
+print(wfh)
+if wfh == "work":
+    file = r"C:\Users\bkrause\Desktop\Data101\SeedData.csv"
+else:
+    file = r'C:\Users\bryan\Downloads\SeedData.csv'
+
 # set useful columns to keep
 columns = [
     'Voucher #','Date',
@@ -100,14 +106,22 @@ with engine.connect() as con:
     con.execute(
         "ALTER TABLE rawdata ADD PRIMARY KEY (CoolId(150))")
 
+# create dimension tables
 tagloc.to_sql(con=engine,
               name='tagloc', if_exists='replace')
-with engine.connect() as con:
-    con.execute(
-        "ALTER TABLE tagloc ADD PRIMARY KEY (tagLocation(75))")
 ALoc2.to_sql(con=engine,
            name='aloc', if_exists='replace')
-with engine.connect() as con:
-    con.execute(
-        "ALTER TABLE aloc ADD PRIMARY KEY (name(75))")
+# add primary keys since you know its not automatic
+engine.execute(
+    "ALTER TABLE aloc ADD appid INT PRIMARY KEY AUTO_INCREMENT FIRST")
+engine.execute(
+    "ALTER TABLE tagloc ADD tagid INT PRIMARY KEY AUTO_INCREMENT FIRST")
+# add foriegn keys 
+# engine.execute(
+#     """
+# ALTER TABLE rawdata
+# ADD FOREIGN KEY(name)
+# REFERENCES aloc(name);  
+#     """
+# )
 
