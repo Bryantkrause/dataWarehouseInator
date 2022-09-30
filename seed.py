@@ -9,7 +9,8 @@ db = os.environ.get("database")
 pw = os.environ.get("pw")
 
 # file location for seed data
-file = r"C:\Users\bkrause\Desktop\Data101\SeedData.csv"
+file = r'C:\Users\bryan\Downloads\SeedData.csv'
+# file = r"C:\Users\bkrause\Desktop\Data101\SeedData.csv"
 # set useful columns to keep
 columns = [
     'Voucher #','Date',
@@ -93,10 +94,11 @@ tag = df['TagLocation'].unique()
 tagloc = pd.DataFrame(tag, columns=['TagLocation'])
 # print(Item)
 engine = create_engine(f'mysql://root:{pw}@localhost/{db}')
+print(df['CoolId'].nunique())
 df.to_sql(con=engine, name='rawdata', if_exists='replace', index=False)
 with engine.connect() as con:
     con.execute(
-        "ALTER TABLE rawdata ADD PRIMARY KEY (CoolId(75))")
+        "ALTER TABLE rawdata ADD PRIMARY KEY (CoolId(150))")
 
 tagloc.to_sql(con=engine,
               name='tagloc', if_exists='replace')
@@ -108,3 +110,4 @@ ALoc2.to_sql(con=engine,
 with engine.connect() as con:
     con.execute(
         "ALTER TABLE aloc ADD PRIMARY KEY (name(75))")
+
