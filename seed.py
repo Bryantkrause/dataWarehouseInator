@@ -36,7 +36,7 @@ df = pd.read_csv(file, usecols=columns, parse_dates=["Date"])
 
 # remove special characters and spaces from column names
 df.rename(columns={
-    'Voucher #': 'Voucher',
+    'Voucher #': 'InvoiceNumber',
     'Ref #': 'PurchaseOrder',
     'Item ID': 'ItemID',
     'U/M': 'Unit',
@@ -50,7 +50,7 @@ df['Taxes'].fillna("0.0", inplace=True)
 df['Memo'].fillna("0.0", inplace=True)
 df['Comments'].fillna("0.0", inplace=True)
 df['PurchaseOrder'].fillna("0.0", inplace=True)
-df['CoolId'] = df['Voucher'] + df['Vendor'] + df['Line'].astype(str)
+df['CoolId'] = df['Invoice'] + df['Vendor'] + df['Line'].astype(str)
 # # df = df.set_index('UniqueId')
 
 df['Approvers'].fillna("No", inplace=True)
@@ -117,11 +117,16 @@ engine.execute(
 engine.execute(
     "ALTER TABLE tagloc ADD tagid INT PRIMARY KEY AUTO_INCREMENT FIRST")
 # add foriegn keys 
-# engine.execute(
-#     """
-# ALTER TABLE rawdata
-# ADD FOREIGN KEY(name)
-# REFERENCES aloc(name);  
-#     """
-# )
-
+engine.execute(
+    """
+ALTER TABLE rawdata
+ADD COLUMN tagid INT;  
+    """
+)
+engine.execute(
+    """
+ALTER TABLE rawdata
+ADD FOREIGN KEY (TagLocation)
+REFERENCES tagloc(TagLocation);  
+    """
+)
