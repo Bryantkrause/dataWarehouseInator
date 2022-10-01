@@ -50,7 +50,7 @@ df['Taxes'].fillna("0.0", inplace=True)
 df['Memo'].fillna("0.0", inplace=True)
 df['Comments'].fillna("0.0", inplace=True)
 df['PurchaseOrder'].fillna("0.0", inplace=True)
-df['CoolId'] = df['Invoice'] + df['Vendor'] + df['Line'].astype(str)
+df['CoolId'] = df['InvoiceNumber'] + df['Vendor'] + df['Line'].astype(str)
 # # df = df.set_index('UniqueId')
 
 df['Approvers'].fillna("No", inplace=True)
@@ -123,10 +123,10 @@ ALTER TABLE rawdata
 ADD COLUMN tagid INT;  
     """
 )
-engine.execute(
-    """
-ALTER TABLE rawdata
-ADD FOREIGN KEY (TagLocation)
-REFERENCES tagloc(TagLocation);  
-    """
-)
+# engine.execute(
+#     """
+# ALTER TABLE rawdata
+# ADD FOREIGN KEY (TagLocation)
+# REFERENCES tagloc(TagLocation);  
+#     """
+# )
