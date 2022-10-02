@@ -19,14 +19,14 @@ else:
 
 # set useful columns to keep
 columns = [
-    'Voucher #','Date',
+    'Voucher #', 'Date',
     'Vendor', 'Ref #',
     'Line',  'Item ID',
     'Description', 'Quantity',
     'U/M',  'Price',
     'Tax', 'Amount',
     'Taxes', 'Total base',
-    'Account','Group',
+    'Account', 'Group',
     'Tag', 'Memo',
     'Comments', 'Approvers',
     'Approval Status'
@@ -38,7 +38,7 @@ df = pd.read_csv(file, usecols=columns, parse_dates=["Date"])
 df.rename(columns={
     'Voucher #': 'InvoiceNumber',
     'Ref #': 'PurchaseOrder',
-    'Item ID': 'ItemID',
+    'Item ID': 'Item',
     'U/M': 'Unit',
     'Total base': 'TotalBase',
     'Approval Status': 'ApprovalStatus'},
@@ -55,8 +55,19 @@ df['CoolId'] = df['InvoiceNumber'] + df['Vendor'] + df['Line'].astype(str)
 
 df['Approvers'].fillna("No", inplace=True)
 
+# create data frames off of future placement into db
+# invoice table
+invoiceTable = df.groupby(by=['InvoiceNumber', 'Date', 'Vendor',
+                          'Comments', 'ApprovalStatus', 'PurchaseOrder'])['TotalBase'].sum()
+invoiceTable.to_frame()
+invoiceTable = invoiceTable.reset_index()
+invoiceTable = invoiceTable.rename_axis("invoiceid", axis="columns")
+print(invoiceTable.info())
+# invoicTable = df[['InvoiceNumber', 'Date', 'Comments',
+#                   'Description', 'Item', 'ApprovalStatus', 'Tax', 'PurchaseOrder', ]]
 
-Item = df['ItemID'].unique()
+
+Item = df['Item'].unique()
 Account = df['Account'].unique()
 Group = df['Group'].unique()
 df['Name'] = df.Approvers.str.replace('[^a-zA-Z]', '')
@@ -67,7 +78,7 @@ df['Name'] = df['Name'].map(
 # this is an attempt at removing the guess work
 # get location data based on approver
 appChoice = ['Cerritos', 'Rancho', 'Fullerton',
-             'Downey', 'Rancho', 'Rancho', 'Rancho','None']
+             'Downey', 'Rancho', 'Rancho', 'Rancho', 'None']
 appCondition = [
     df['Name'].str.contains(r'FrankGuzma', na=False),
     df['Name'].str.contains(r'CarlosGarcia', na=False),
@@ -84,14 +95,17 @@ ALoc2 = pd.DataFrame(Approvers, columns=['Name'])
 
 
 # get locaiton data based on tag system
-tagChoice= [
+tagChoice = [
     'Cerritos', 'Fullerton', 'Rancho', 'Rancho', 'Downey'
 ]
 tagCondition = [
-    df['Tag'].str.contains(r'16107 - Location - 16107 Commerce Way - Cerritos', na=False),
+    df['Tag'].str.contains(
+        r'16107 - Location - 16107 Commerce Way - Cerritos', na=False),
     df['Tag'].str.contains(r'210 - Location - 210 E. Lambert Road', na=False),
-    df['Tag'].str.contains(r'9278-2 - Location-9278 Charles Smith Ave.-Rancho Cucamonga', na=False),
-    df['Tag'].str.contains(r'11937-2 - Total - 11937 Woodruff - Downey', na=False),
+    df['Tag'].str.contains(
+        r'9278-2 - Location-9278 Charles Smith Ave.-Rancho Cucamonga', na=False),
+    df['Tag'].str.contains(
+        r'11937-2 - Total - 11937 Woodruff - Downey', na=False),
     df['Tag'].str.contains(r'11937 - Westset - 11937 Woodruff Ave. - Downey', na=False)]
 df['TagLocation'] = np.select(tagCondition, tagChoice, default='None')
 
@@ -107,16 +121,20 @@ with engine.connect() as con:
         "ALTER TABLE rawdata ADD PRIMARY KEY (CoolId(150))")
 
 # create dimension tables
+invoiceTable.to_sql(con=engine,
+                    name='invoice', if_exists='replace')
+engine.execute(
+    "ALTER TABLE invoice MODIFY index int NOT NULL DEFAULT 0;")
 tagloc.to_sql(con=engine,
               name='tagloc', if_exists='replace')
 ALoc2.to_sql(con=engine,
-           name='aloc', if_exists='replace')
+             name='aloc', if_exists='replace')
 # add primary keys since you know its not automatic
 engine.execute(
     "ALTER TABLE aloc ADD appid INT PRIMARY KEY AUTO_INCREMENT FIRST")
 engine.execute(
     "ALTER TABLE tagloc ADD tagid INT PRIMARY KEY AUTO_INCREMENT FIRST")
-# add foriegn keys 
+# add foriegn keys
 engine.execute(
     """
 ALTER TABLE rawdata
@@ -127,6 +145,6 @@ ADD COLUMN tagid INT;
 #     """
 # ALTER TABLE rawdata
 # ADD FOREIGN KEY (TagLocation)
-# REFERENCES tagloc(TagLocation);  
+# REFERENCES tagloc(TagLocation);
 #     """
 # )
