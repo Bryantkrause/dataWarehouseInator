@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from sqlalchemy import create_engine
 import numpy as np
-
+from sqlalchemy.types import Integer, String
 
 db = os.environ.get("database")
 pw = os.environ.get("pw")
@@ -122,18 +122,26 @@ with engine.connect() as con:
 
 # create dimension tables
 invoiceTable.to_sql(con=engine,
-                    name='invoice', if_exists='replace')
+                    name='invoice', if_exists='replace', index='invoice_id', dtype={
+                        'InvoiceNumber': String(255),
+                        'Date': String(255),
+                        'Vendor': String(255),
+                        'Comments': String(275),
+                        'ApprovalStatus': String(255),
+                        'PurchaseOrder':  String(255)
+                    })
 engine.execute(
-    "ALTER TABLE invoice MODIFY index int NOT NULL DEFAULT 0;")
+    """Alter table invoice
+ADD Primary Key(invoice_id); """)
 tagloc.to_sql(con=engine,
               name='tagloc', if_exists='replace')
 ALoc2.to_sql(con=engine,
              name='aloc', if_exists='replace')
 # add primary keys since you know its not automatic
 engine.execute(
-    "ALTER TABLE aloc ADD appid INT PRIMARY KEY AUTO_INCREMENT FIRST")
+    "ALTER TABLE aloc ADD app_id INT PRIMARY KEY AUTO_INCREMENT FIRST")
 engine.execute(
-    "ALTER TABLE tagloc ADD tagid INT PRIMARY KEY AUTO_INCREMENT FIRST")
+    "ALTER TABLE tagloc ADD tag_id INT PRIMARY KEY AUTO_INCREMENT FIRST")
 # add foriegn keys
 engine.execute(
     """
