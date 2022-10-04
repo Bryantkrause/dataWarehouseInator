@@ -116,10 +116,8 @@ Approvers = df['Name'].unique()
 ALoc2 = pd.DataFrame(Approvers, columns=['Name'])
 
 
-invoiceConnector = df.loc[:, ['InvoiceNumber', 'Line', "Location"]]
-invoiceConnector = invoiceConnector.drop_duplicates()
-print(invoiceConnector.info())
-print(invoiceConnector)
+invoiceConnector = df.loc[:, ['InvoiceNumber', 'Line', "Location", 'Vendor']]
+
 # get locaiton data based on tag system
 
 
@@ -145,9 +143,16 @@ invoiceTable.to_sql(con=engine,
                         'PurchaseOrder':  String(255)
                     })
 
-tagloc.to_sql(con=engine,
+invoiceConnector.to_sql(con=engine,
               name='taglocation', if_exists='replace', index='tagLocation_id', dtype={
                   'TagLocation': String(255)})
+tagloc.to_sql(con=engine,
+              name='taglocation', if_exists='replace', index='tagLocation_id', dtype={
+                  'InvoiceNumber': String(255),
+                  'Vendor': String(255),
+                  'Line': Integer(25),
+                  'Location': String(255)
+                  })
 
 ALoc2.to_sql(con=engine,
              name='approver', if_exists='replace', index='approver_id',dtype={
