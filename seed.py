@@ -57,16 +57,12 @@ df['Approvers'].fillna("No", inplace=True)
 
 # create data frames off of future placement into db
 # invoice table
-invoiceTable = df.groupby(by=['InvoiceNumber', 'Date', 'Vendor',
-                          'Comments', 'ApprovalStatus', 'PurchaseOrder'])['TotalBase'].sum()
-invoiceTable.to_frame()
-invoiceTable = invoiceTable.reset_index()
-invoiceTable = invoiceTable.rename_axis("invoiceid", axis="columns")
-print(invoiceTable.info())
+
 # invoicTable = df[['InvoiceNumber', 'Date', 'Comments',
 #                   'Description', 'Item', 'ApprovalStatus', 'Tax', 'PurchaseOrder', ]]
 
-
+##########################################################################################################
+##########################################################################################################
 Item = df['Item'].unique()
 Account = df['Account'].unique()
 Group = df['Group'].unique()
@@ -89,12 +85,6 @@ appCondition = [
     df['Name'].str.contains(r'RobertOrtega', na=False),
     df['Name'].str.contains(r'No', na=False)]
 df['Location'] = np.select(appCondition, appChoice, default='None')
-
-Approvers = df['Name'].unique()
-ALoc2 = pd.DataFrame(Approvers, columns=['Name'])
-
-
-# get locaiton data based on tag system
 tagChoice = [
     'Cerritos', 'Fullerton', 'Rancho', 'Rancho', 'Downey'
 ]
@@ -108,17 +98,41 @@ tagCondition = [
         r'11937-2 - Total - 11937 Woodruff - Downey', na=False),
     df['Tag'].str.contains(r'11937 - Westset - 11937 Woodruff Ave. - Downey', na=False)]
 df['TagLocation'] = np.select(tagCondition, tagChoice, default='None')
+##########################################################################################################
+##########################################################################################################
+#                                   data frame update add below this                                     #
+##########################################################################################################
+##########################################################################################################
+
+invoiceTable = df.groupby(by=['InvoiceNumber', 'Date', 'Vendor',
+                          'Comments', 'ApprovalStatus', 'PurchaseOrder'])['TotalBase'].sum()
+invoiceTable.to_frame()
+invoiceTable = invoiceTable.reset_index()
+invoiceTable = invoiceTable.rename_axis("invoiceid", axis="columns")
+print(invoiceTable.info())
+
+
+Approvers = df['Name'].unique()
+ALoc2 = pd.DataFrame(Approvers, columns=['Name'])
+
+
+invoiceConnector = df.loc[:, ['InvoiceNumber', 'Line', "Location"]]
+invoiceConnector = invoiceConnector.drop_duplicates()
+print(invoiceConnector.info())
+print(invoiceConnector)
+# get locaiton data based on tag system
+
 
 print(df['TagLocation'].unique())
 tag = df['TagLocation'].unique()
 tagloc = pd.DataFrame(tag, columns=['TagLocation'])
 # print(Item)
 engine = create_engine(f'mysql://root:{pw}@localhost/{db}')
-print(df['CoolId'].nunique())
-df.to_sql(con=engine, name='rawdata', if_exists='replace', index=False)
-with engine.connect() as con:
-    con.execute(
-        "ALTER TABLE rawdata ADD PRIMARY KEY (CoolId(150))")
+# print(df['CoolId'].nunique())
+# df.to_sql(con=engine, name='rawdata', if_exists='replace', index=False)
+# with engine.connect() as con:
+#     con.execute(
+#         "ALTER TABLE rawdata ADD PRIMARY KEY (CoolId(150))")
 
 # create dimension tables
 invoiceTable.to_sql(con=engine,
@@ -130,26 +144,37 @@ invoiceTable.to_sql(con=engine,
                         'ApprovalStatus': String(255),
                         'PurchaseOrder':  String(255)
                     })
+
+tagloc.to_sql(con=engine,
+              name='taglocation', if_exists='replace', index='tagLocation_id', dtype={
+                  'TagLocation': String(255)})
+
+ALoc2.to_sql(con=engine,
+             name='approver', if_exists='replace', index='approver_id',dtype={
+                 'Name': String(255)})
 engine.execute(
     """Alter table invoice
 ADD Primary Key(invoice_id); """)
-tagloc.to_sql(con=engine,
-              name='tagloc', if_exists='replace')
-ALoc2.to_sql(con=engine,
-             name='aloc', if_exists='replace')
+engine.execute(
+    """Alter table taglocation
+ADD Primary Key(taglocation); """)
+engine.execute(
+    """Alter table approver
+ADD Primary Key(approver_id); """)
+
 # add primary keys since you know its not automatic
-engine.execute(
-    "ALTER TABLE aloc ADD app_id INT PRIMARY KEY AUTO_INCREMENT FIRST")
-engine.execute(
-    "ALTER TABLE tagloc ADD tag_id INT PRIMARY KEY AUTO_INCREMENT FIRST")
-# add foriegn keys
-engine.execute(
-    """
-ALTER TABLE rawdata
-ADD COLUMN tagid INT;  
-    """
-)
 # engine.execute(
+#     "ALTER TABLE aloc ADD app_id INT PRIMARY KEY AUTO_INCREMENT FIRST")
+# engine.execute(
+#     "ALTER TABLE tagloc ADD tag_id INT PRIMARY KEY AUTO_INCREMENT FIRST")
+# add foriegn keys
+# engine.execute(
+#     """
+# ALTER TABLE rawdata
+# ADD COLUMN tagid INT;  
+#     """
+# )
+# # engine.execute(
 #     """
 # ALTER TABLE rawdata
 # ADD FOREIGN KEY (TagLocation)
