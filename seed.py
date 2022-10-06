@@ -116,11 +116,14 @@ Approvers = df['Name'].unique()
 ALoc2 = pd.DataFrame(Approvers, columns=['Name'])
 
 
-invoiceConnector = df.loc[:, ['InvoiceNumber', 'Line', "Location", 'Vendor']]
-
+invoicecolumns = df.loc[:, ['InvoiceNumber', 'Line', "Location", 'Vendor']]
+invoiceConnector = pd.DataFrame(df, columns=[
+                     'InvoiceNumber', 'Line', "Location", 'Vendor'])
 # get locaiton data based on tag system
 
-
+invoiceTable['row_id'] = np.arange(len(invoiceTable))
+# https://www.datasciencemadesimple.com/generate-row-number-in-pandas-python-2/
+# https: // stackoverflow.com/questions/43741964/merging-two-dataframes-of-different-length-on-a-particular-column-with -differen
 print(df['TagLocation'].unique())
 tag = df['TagLocation'].unique()
 tagloc = pd.DataFrame(tag, columns=['TagLocation'])
@@ -144,13 +147,16 @@ invoiceTable.to_sql(con=engine,
                     })
 
 invoiceConnector.to_sql(con=engine,
-              name='taglocation', if_exists='replace', index='tagLocation_id', dtype={
-                  'TagLocation': String(255)})
+              name='invoiceconnector', if_exists='replace', index='connector_id', dtype={
+                  'InvoiceNumber': String(255),
+                  'Line': Integer,
+                  'Location': String(255),
+                  'Vendor': String(255) })
 tagloc.to_sql(con=engine,
               name='taglocation', if_exists='replace', index='tagLocation_id', dtype={
                   'InvoiceNumber': String(255),
                   'Vendor': String(255),
-                  'Line': Integer(25),
+                  'Line': Integer,
                   'Location': String(255)
                   })
 
@@ -162,7 +168,7 @@ engine.execute(
 ADD Primary Key(invoice_id); """)
 engine.execute(
     """Alter table taglocation
-ADD Primary Key(taglocation); """)
+ADD Primary Key(tagLocation_id); """)
 engine.execute(
     """Alter table approver
 ADD Primary Key(approver_id); """)
