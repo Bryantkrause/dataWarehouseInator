@@ -118,16 +118,24 @@ ALoc2 = pd.DataFrame(Approvers, columns=['Name'])
 
 invoicecolumns = df.loc[:, ['InvoiceNumber', 'Line', "Location", 'Vendor']]
 invoiceConnector = pd.DataFrame(df, columns=[
-                     'InvoiceNumber', 'Line', "Location", 'Vendor'])
+    'InvoiceNumber', 'Line', "Location", 'Vendor'])
 # get locaiton data based on tag system
 
 invoiceTable['row_id'] = np.arange(len(invoiceTable))
+print(invoiceTable.head())
 # https://www.datasciencemadesimple.com/generate-row-number-in-pandas-python-2/
 # https: // stackoverflow.com/questions/43741964/merging-two-dataframes-of-different-length-on-a-particular-column-with -differen
+invoiceConnector['InvoiceUniqueKey'] = invoiceConnector['InvoiceNumber'] + \
+    invoiceConnector['Vendor']
+invoiceTable['InvoiceUniqueKey'] = invoiceTable['InvoiceNumber'] + \
+    invoiceTable['Vendor']
+
+
 print(df['TagLocation'].unique())
 tag = df['TagLocation'].unique()
 tagloc = pd.DataFrame(tag, columns=['TagLocation'])
 # print(Item)
+
 engine = create_engine(f'mysql://root:{pw}@localhost/{db}')
 # print(df['CoolId'].nunique())
 # df.to_sql(con=engine, name='rawdata', if_exists='replace', index=False)
@@ -139,6 +147,7 @@ engine = create_engine(f'mysql://root:{pw}@localhost/{db}')
 invoiceTable.to_sql(con=engine,
                     name='invoice', if_exists='replace', index='invoice_id', dtype={
                         'InvoiceNumber': String(255),
+                        'InvoiceUniqueKey': String(255),
                         'Date': String(255),
                         'Vendor': String(255),
                         'Comments': String(275),
@@ -147,21 +156,22 @@ invoiceTable.to_sql(con=engine,
                     })
 
 invoiceConnector.to_sql(con=engine,
-              name='invoiceconnector', if_exists='replace', index='connector_id', dtype={
-                  'InvoiceNumber': String(255),
-                  'Line': Integer,
-                  'Location': String(255),
-                  'Vendor': String(255) })
+                        name='invoiceconnector', if_exists='replace', index='connector_id', dtype={
+                            'InvoiceNumber': String(255),
+                            'InvoiceUniqueKey': String(255),
+                            'Line': Integer,
+                            'Location': String(255),
+                            'Vendor': String(255)})
 tagloc.to_sql(con=engine,
               name='taglocation', if_exists='replace', index='tagLocation_id', dtype={
                   'InvoiceNumber': String(255),
                   'Vendor': String(255),
                   'Line': Integer,
                   'Location': String(255)
-                  })
+              })
 
 ALoc2.to_sql(con=engine,
-             name='approver', if_exists='replace', index='approver_id',dtype={
+             name='approver', if_exists='replace', index='approver_id', dtype={
                  'Name': String(255)})
 engine.execute(
     """Alter table invoice
@@ -172,7 +182,21 @@ ADD Primary Key(tagLocation_id); """)
 engine.execute(
     """Alter table approver
 ADD Primary Key(approver_id); """)
-
+engine.execute(
+    """Alter table invoice
+ADD UNIQUE(InvoiceUniqueKey); """)
+engine.execute(
+    """Alter table invoiceconnector
+ADD UNIQUE(connector_id); """)
+engine.execute(
+    """Alter table invoice Modify InvoiceUniqueKey VARCHAR(255) NOT NULL; """)
+engine.execute(
+    """Alter table invoiceconnector Modify InvoiceUniqueKey VARCHAR(255) NOT NULL; """)
+engine.execute(
+    """Alter table invoiceconnector Modify connector_id bigint NOT NULL; """)
+# engine.execute(
+#     """Alter table invoice
+# ADD FOREIGN Key(InvoiceUniqueKey) REFERENCES invoiceconnector(InvoiceUniqueKey); """)
 # add primary keys since you know its not automatic
 # engine.execute(
 #     "ALTER TABLE aloc ADD app_id INT PRIMARY KEY AUTO_INCREMENT FIRST")
@@ -182,7 +206,7 @@ ADD Primary Key(approver_id); """)
 # engine.execute(
 #     """
 # ALTER TABLE rawdata
-# ADD COLUMN tagid INT;  
+# ADD COLUMN tagid INT;
 #     """
 # )
 # # engine.execute(
