@@ -98,6 +98,14 @@ tagCondition = [
         r'11937-2 - Total - 11937 Woodruff - Downey', na=False),
     df['Tag'].str.contains(r'11937 - Westset - 11937 Woodruff Ave. - Downey', na=False)]
 df['TagLocation'] = np.select(tagCondition, tagChoice, default='None')
+
+locationCondition = [df['TagLocation'] == 'None']
+
+LocationChoice = [df['Location']]
+
+df['realLocation'] = np.select(
+    locationCondition, LocationChoice, default=df['TagLocation'])
+print(df)
 ##########################################################################################################
 ##########################################################################################################
 #                                   data frame update add below this                                     #
@@ -116,9 +124,9 @@ Approvers = df['Name'].unique()
 ALoc2 = pd.DataFrame(Approvers, columns=['Name'])
 
 
-invoicecolumns = df.loc[:, ['InvoiceNumber', 'Line', "Location", 'Vendor']]
+invoicecolumns = df.loc[:, ['InvoiceNumber', 'Line', "realLocation", 'Vendor']]
 invoiceConnector = pd.DataFrame(df, columns=[
-    'InvoiceNumber', 'Line', "Location", 'Vendor'])
+    'InvoiceNumber', 'Line', "realLocation", 'Vendor'])
 # get locaiton data based on tag system
 
 invoiceTable['row_id'] = np.arange(len(invoiceTable))
@@ -134,16 +142,17 @@ invoiceTable['InvoiceUniqueKey'] = invoiceTable['InvoiceNumber'] + \
 print(df['TagLocation'].unique())
 tag = df['TagLocation'].unique()
 tagloc = pd.DataFrame(tag, columns=['TagLocation'])
-# print(Item)
 
 engine = create_engine(f'mysql://root:{pw}@localhost/{db}')
-# print(df['CoolId'].nunique())
-# df.to_sql(con=engine, name='rawdata', if_exists='replace', index=False)
-# with engine.connect() as con:
-#     con.execute(
-#         "ALTER TABLE rawdata ADD PRIMARY KEY (CoolId(150))")
+
 
 # create dimension tables
+invoiceConnector.to_sql(con=engine,
+                        name='invoiceconnector', if_exists='replace', index='connector_id', dtype={
+                            'InvoiceNumber': String(255),
+                            'InvoiceUniqueKey': String(255),
+                            'Line': Integer,
+                            'realLocation': String(255)})
 invoiceTable.to_sql(con=engine,
                     name='invoice', if_exists='replace', index='invoice_id', dtype={
                         'InvoiceNumber': String(255),
@@ -155,33 +164,27 @@ invoiceTable.to_sql(con=engine,
                         'PurchaseOrder':  String(255)
                     })
 
-invoiceConnector.to_sql(con=engine,
-                        name='invoiceconnector', if_exists='replace', index='connector_id', dtype={
-                            'InvoiceNumber': String(255),
-                            'InvoiceUniqueKey': String(255),
-                            'Line': Integer,
-                            'Location': String(255),
-                            'Vendor': String(255)})
-tagloc.to_sql(con=engine,
-              name='taglocation', if_exists='replace', index='tagLocation_id', dtype={
-                  'InvoiceNumber': String(255),
-                  'Vendor': String(255),
-                  'Line': Integer,
-                  'Location': String(255)
-              })
 
-ALoc2.to_sql(con=engine,
-             name='approver', if_exists='replace', index='approver_id', dtype={
-                 'Name': String(255)})
+# tagloc.to_sql(con=engine,
+#               name='taglocation', if_exists='replace', index='tagLocation_id', dtype={
+#                   'InvoiceNumber': String(255),
+#                   'Vendor': String(255),
+#                   'Line': Integer,
+#                   'Location': String(255)
+#               })
+
+# ALoc2.to_sql(con=engine,
+#              name='approver', if_exists='replace', index='approver_id', dtype={
+#                  'Name': String(255)})
 engine.execute(
     """Alter table invoice
 ADD Primary Key(invoice_id); """)
-engine.execute(
-    """Alter table taglocation
-ADD Primary Key(tagLocation_id); """)
-engine.execute(
-    """Alter table approver
-ADD Primary Key(approver_id); """)
+# engine.execute(
+#     """Alter table taglocation
+# ADD Primary Key(tagLocation_id); """)
+# engine.execute(
+#     """Alter table approver
+# ADD Primary Key(approver_id); """)
 engine.execute(
     """Alter table invoice
 ADD UNIQUE(InvoiceUniqueKey); """)
@@ -194,25 +197,4 @@ engine.execute(
     """Alter table invoiceconnector Modify InvoiceUniqueKey VARCHAR(255) NOT NULL; """)
 engine.execute(
     """Alter table invoiceconnector Modify connector_id bigint NOT NULL; """)
-# engine.execute(
-#     """Alter table invoice
-# ADD FOREIGN Key(InvoiceUniqueKey) REFERENCES invoiceconnector(InvoiceUniqueKey); """)
-# add primary keys since you know its not automatic
-# engine.execute(
-#     "ALTER TABLE aloc ADD app_id INT PRIMARY KEY AUTO_INCREMENT FIRST")
-# engine.execute(
-#     "ALTER TABLE tagloc ADD tag_id INT PRIMARY KEY AUTO_INCREMENT FIRST")
-# add foriegn keys
-# engine.execute(
-#     """
-# ALTER TABLE rawdata
-# ADD COLUMN tagid INT;
-#     """
-# )
-# # engine.execute(
-#     """
-# ALTER TABLE rawdata
-# ADD FOREIGN KEY (TagLocation)
-# REFERENCES tagloc(TagLocation);
-#     """
-# )
+
