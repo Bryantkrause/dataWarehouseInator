@@ -23,62 +23,74 @@ df = df[df['Category'].str.contains(dropme) == False]
 
 conditions = [
     df['Category'].str.contains(
-        r'Bank Fee (ACH/Wire Bank Fee)', na=False),
+        r'Bank Fee', na=False),
     df['Category'].str.contains(
-        r'CH (Administrative Support)', na=False),
+        r'Administrative', na=False),
     df['Category'].str.contains(
-        r'EDI (EDI Fees)', na=False),
+        r'EDI Fees', na=False),
     df['Category'].str.contains(
-        r'Rescheduing Fee (Rescheduling fee)', na=False),
+        r'Rescheduing Fee', na=False),
     df['Category'].str.contains(
-        r'Rescheduing Fee (Rescheduling fee)', na=False),
+        r'Rescheduling fee', na=False),
     df['Category'].str.contains(
-        r'Rescheduling fee (Rescheduling fee)', na=False),
+        r'Delv Service', na=False),
     df['Category'].str.contains(
-        r'Delv Service (Transportation Services)', na=False),
+        r'Dray La Mirada', na=False),
     df['Category'].str.contains(
-        r'Dray La Mirada (Drayage Container:)', na=False),
+        r'Inbound Handling', na=False),
     df['Category'].str.contains(
-        r'Inbound Handling - PH (Inbound Handling)', na=False),
+        r'OF Inbound Handling', na=False),
     df['Category'].str.contains(
-        r'OF Inbound Handling - PH (Inbound Handling: Overflow)', na=False),
+        r'MTRLS', na=False),
     df['Category'].str.contains(
-        r'MTRLS (Materials Supplied)', na=False),
+        r'OF Outbound Handling', na=False),
     df['Category'].str.contains(
-        r'OF Outbound Handling - PH (Outbound Handling:', na=False),
+        r'Outbound Handling', na=False),
     df['Category'].str.contains(
-        r'PH (Product Handling Services) - Other', na=False),
+        r'Product Handling Services', na=False),
     df['Category'].str.contains(
-        r'Fedex (Fedex Services)', na=False),
+        r'Fedex', na=False),
     df['Category'].str.contains(
         r'Postage', na=False),
     df['Category'].str.contains(
-        r'Rework (Rework)', na=False),
+        r'Rework', na=False),
     df['Category'].str.contains(
-        r'MO MIN (Minimum Monthly Service Charge)', na=False),
+        r'Minimum Monthly', na=False),
     df['Category'].str.contains(
-        r'OF PS (Re-Occurring Storage: Overflow)', na=False),
+        r'Re-Occurring Storage: Overflow', na=False),
     df['Category'].str.contains(
-        r'PS (Re-Occurring Storage) - Other', na=False),
+        r'Re-Occurring Storage', na=False),
     df['Category'].str.contains(
-        r'PS (Re-Occurring Storage) - Other', na=False),
-
+        r'Re-Occuring Storage: Cerritos', na=False),
+    df['Category'].str.contains(
+        r'Re-Occurring Storage', na=False)
 ]
 
 choices = [
-    'Clerical', 'Clerical',
-    'Clerical', 'Clerical',
-    'Clerical', 'Drayage',
-    'Drayage', 'Inbound',
-    'Inbound', 'Materials',
-    'Outbound', 'Outbound',
-    'Outbound', 'Postage',
-    'Postage', 'Rework',
-    'Storage', 'Storage',
-    'Storage', 'Storage',
+    'Clerical',
+    'Clerical',
+    'Clerical',
+    'Clerical',
+    'Clerical',
+    'Drayage',
+    'Drayage',
+    'Inbound',
+    'Inbound',
+    'Materials',
+    'Outbound',
+    'Outbound',
+    'Outbound',
+    'Postage',
+    'Postage',
+    'Rework',
+    'Storage',
+    'Storage',
+    'Storage',
+    'Storage',
     'Storage'
 ]
-
+print(len(conditions))
+print(len(choices))
 df['CategoryType'] = np.select(conditions, choices, default='None')
 # df = df[~df.Category.str.contains("Total")]
 # df = df[df['Category'] != 'Total']
