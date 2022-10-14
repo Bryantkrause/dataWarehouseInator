@@ -8,6 +8,7 @@ useColumns = [
 ]
 file = r'C:\Users\bkrause\Documents\RevenueRaw1012222.CSV'
 updatedFile = r'C:\Users\bkrause\Documents\refinedRev.xlsx'
+cNFile = 'CustomerNumbers.csv'
 df = pd.read_csv(file, usecols=useColumns, parse_dates=["Date"])
 columnNames = [
     'Category', 'Date', 'InvoiceNumber', 'Memo', 'Name', 'Amount'
@@ -16,10 +17,7 @@ df.columns = columnNames
 df['Category'] = df['Category'].fillna(method='ffill')
 df = df.dropna(subset=['Date'])
 
-
-dropme = str('01.21 (Warehousing services for the month of January 2021)')
-
-df = df[df['Category'].str.contains(dropme) == False]
+df = df[df.Amount != 0]
 
 conditions = [
     df['Category'].str.contains(
@@ -92,8 +90,11 @@ choices = [
 print(len(conditions))
 print(len(choices))
 df['CategoryType'] = np.select(conditions, choices, default='None')
-# df = df[~df.Category.str.contains("Total")]
-# df = df[df['Category'] != 'Total']
+cnDF = pd.read_csv(cNFile)
+print(cnDF.head())
+print(cnDF.info())
+addition = cnDF['Number']
+df = df.merge(cnDF, how='left')
 
 print(df.head())
 print(df.info())
