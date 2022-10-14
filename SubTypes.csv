@@ -1,0 +1,22 @@
+﻿Category,Subtype1,Subtype2
+Bank Fee (ACH/Wire Bank Fee),Bank Fee,Misc
+CH (Administrative Support),Clerical,Clerical
+Delv Service (Transportation Services),Drayage,Misc
+Dray La Mirada (Drayage Container:),Drayage,Misc
+EDI (EDI Fees),Clerical,Misc
+Fedex (Fedex Services),Postage,Misc
+Inbound Handling - PH (Inbound Handling),Inbound Handling,Inbound Handling
+MO MIN (Minimum Monthly Service Charge),Storage,Storage
+MTRLS (Materials Supplied),Materials,Materials
+OF Inbound Handling - PH (Inbound Handling: Overflow),Overflow Inbound,Misc
+OF Outbound Handling - PH (Outbound Handling: Overflow),Overflow Outbound,Misc
+OF PS (Re-Occurring Storage: Overflow),Overflow Storage,Misc
+Outbound Handling - PH (Outbound Handling),Outbound Handling,Outbound Handling
+PH (Product Handling Services) - Other,Outbound Handling,Outbound Handling
+Postage,Postage,Misc
+PS (Re-Occurring Storage) - Other,Storage,Storage
+PSC-16107 (Re-Occuring Storage: Cerritos - 16107),Storage,Storage
+PSL (Re-Occurring Storage; La Mirada),Storage,Storage
+Rescheduing Fee (Rescheduling fee),Clerical,Clerical
+Rescheduling fee (Rescheduling fee),Clerical,Clerical
+Rework (Rework),Rework,Misc

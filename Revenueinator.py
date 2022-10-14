@@ -1,23 +1,28 @@
 import pandas as pd
 import numpy as np
 from sqlalchemy import column
-
+import datetime
 
 useColumns = [
     'Unnamed: 0', 'Date', 'Num', 'Memo', 'Name', 'Amount'
 ]
+# Get Files
 file = r'C:\Users\bkrause\Documents\RevenueRaw1012222.CSV'
 updatedFile = r'C:\Users\bkrause\Documents\refinedRev.xlsx'
 cNFile = 'CustomerNumbers.csv'
+subFile = 'SubTypes.csv'
+locFile = 'Location.csv'
+# create data frame only use needed data
 df = pd.read_csv(file, usecols=useColumns, parse_dates=["Date"])
 columnNames = [
     'Category', 'Date', 'InvoiceNumber', 'Memo', 'Name', 'Amount'
 ]
 df.columns = columnNames
 df['Category'] = df['Category'].fillna(method='ffill')
+# remove totals and rows with out amount
 df = df.dropna(subset=['Date'])
-
 df = df[df.Amount != 0]
+
 
 conditions = [
     df['Category'].str.contains(
@@ -91,11 +96,31 @@ print(len(conditions))
 print(len(choices))
 df['CategoryType'] = np.select(conditions, choices, default='None')
 cnDF = pd.read_csv(cNFile)
-print(cnDF.head())
-print(cnDF.info())
-addition = cnDF['Number']
-df = df.merge(cnDF, how='left')
 
+
+df = df.merge(cnDF, how='left')
+subDF = pd.read_csv(subFile)
+df = df.merge(subDF, how='left')
+
+# convert date of invoicing to date of activity
+def vec_dt_replace(series, year=None, month=None, day=None):
+    return pd.to_datetime(
+        {'year': series.dt.year if year is None else year,
+         'month': series.dt.month if month is None else month,
+         'day': series.dt.day if day is None else day})
+
+df.Date = vec_dt_replace(df.Date, day=1) - pd.Timedelta(days=1)
+
+
+df['Month'] = pd.DatetimeIndex(df['Date']).month
+df['Year'] = pd.DatetimeIndex(df['Date']).year
+
+# need to convert month to previous month
+locDF = pd.read_csv(locFile)
+print(df.head())
+print(locDF.head())
+
+df = df.merge(locDF, on=['Number', 'Month'],  how='left')
 print(df.head())
 print(df.info())
 
