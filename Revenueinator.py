@@ -1,14 +1,25 @@
+from venv import create
 import pandas as pd
 import numpy as np
-from sqlalchemy import column
+from sqlalchemy import create_engine
 import datetime
+import os
+from sqlalchemy.types import Integer, String, Date, Float
 
 useColumns = [
     'Unnamed: 0', 'Date', 'Num', 'Memo', 'Name', 'Amount'
 ]
 # Get Files
-file = r'C:\Users\bkrause\Documents\RevenueRaw1012222.CSV'
-updatedFile = r'C:\Users\bkrause\Documents\refinedRev.xlsx'
+wfh = os.environ.get("location")
+db = os.environ.get("database")
+pw = os.environ.get("pw")
+if wfh == "work":
+    file = r'C:\Users\bkrause\Documents\RevenueRaw1012222.CSV'
+    updatedFile = r'C:\Users\bkrause\Documents\refinedRev.xlsx'
+else:
+    file = 'RevenueRaw1012222.CSV'
+    updatedFile = 'refinedRev.xlsx'
+
 cNFile = 'CustomerNumbers.csv'
 subFile = 'SubTypes.csv'
 locFile = 'Location.csv'
@@ -95,12 +106,7 @@ choices = [
 print(len(conditions))
 print(len(choices))
 df['CategoryType'] = np.select(conditions, choices, default='None')
-cnDF = pd.read_csv(cNFile)
 
-
-df = df.merge(cnDF, how='left')
-subDF = pd.read_csv(subFile)
-df = df.merge(subDF, how='left')
 
 # convert date of invoicing to date of activity
 def vec_dt_replace(series, year=None, month=None, day=None):
@@ -110,12 +116,34 @@ def vec_dt_replace(series, year=None, month=None, day=None):
          'day': series.dt.day if day is None else day})
 
 df.Date = vec_dt_replace(df.Date, day=1) - pd.Timedelta(days=1)
-
-
 df['Month'] = pd.DatetimeIndex(df['Date']).month
 df['Year'] = pd.DatetimeIndex(df['Date']).year
+print(df)
+# put tables in db
+engine = create_engine(f'mysql://root:{pw}@localhost/{db}')
 
-# need to convert month to previous month
+# create detail table
+df.to_sql(con=engine,
+    name='warehouse_revenue', if_exists='replace', dtype={
+        'Category': String(255),
+        'Date': Date,
+        'InvoiceNumber': String(255),
+        'Memo': String(255),
+        'Name': String(255),
+        'Amount': Float,
+        'Name': String(255),
+        'CategoryType': String(255),
+        'Month': Integer,
+        'Year': Integer,
+        'Number': Integer,
+        'Subtype1': String(255),
+        'Subtype2': String(255)
+    })
+
+cnDF = pd.read_csv(cNFile)
+df = df.merge(cnDF, how='left')
+subDF = pd.read_csv(subFile)
+df = df.merge(subDF, how='left')
 locDF = pd.read_csv(locFile)
 print(df.head())
 print(locDF.head())
@@ -127,3 +155,5 @@ print(df.info())
 writer = pd.ExcelWriter(updatedFile, engine='xlsxwriter')
 df.to_excel(writer, sheet_name='Revenue')
 writer.close()
+
+
