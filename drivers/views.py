@@ -3,16 +3,16 @@ from drivers.models import Driver
 
 
 def driver_index(request):
-    driver = Driver.objects.all()
+    drivers = Driver.objects.all()
     context = {
-        'driver': driver
+        'drivers': drivers
     }
     return render(request, 'driver_index.html', context)
 
 
 def driver_detail(request, pk):
-    driver = Driver.objects.get(pk=pk)
+    drivers = Driver.objects.get(pk=pk)
     context = {
-        'driver': driver
+        'drivers': drivers
     }
     return render(request, 'driver_detail.html', context)
