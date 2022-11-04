@@ -12,6 +12,7 @@
                 <h5 class="card-title">First Name: {{ driver.firstName }}</h5>
                 <h5 class="card-title">Last Name: {{ driver.LastName }}</h5>
                 <h5 class="card-title">CLI Number: {{ driver.driverCliNumber }}</h5>
+                <h5 class="card-title">Start Date: {{ driver.startDate }}</h5>
                 <h5 class="card-title">Registration Expires: {{ driver.RegistrationExpires }}</h5>
                 <p class="card-text">License Expires: {{ driver.licenseNumber }}</p>
                 <a href="{% url 'driver_detail' driver.pk %}" class="btn btn-primary">

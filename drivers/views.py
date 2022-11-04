@@ -11,8 +11,8 @@ def driver_index(request):
 
 
 def driver_detail(request, pk):
-    drivers = Driver.objects.get(pk=pk)
+    driver = Driver.objects.get(pk=pk)
     context = {
-        'drivers': drivers
+        'driver': driver
     }
     return render(request, 'driver_detail.html', context)
