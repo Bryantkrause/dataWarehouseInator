@@ -51,3 +51,4 @@ c3 = Contractor(
     addressLocation='abc1235',
     state='CA',
     zip='abc1235')
+    

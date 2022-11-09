@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from drivers.models import Driver
+from drivers.models import Driver, Contractor
 
 
 def driver_index(request):
@@ -16,3 +16,11 @@ def driver_detail(request, pk):
         'driver': driver
     }
     return render(request, 'driver_detail.html', context)
+
+
+def blog_index(request):
+    contractors = Contractor.objects.all().order_by('-created_on')
+    context = {
+        "contractors": contractors,
+    }
+    return render(request, "contractor_index.html", context)
