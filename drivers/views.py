@@ -18,9 +18,32 @@ def driver_detail(request, pk):
     return render(request, 'driver_detail.html', context)
 
 
-def blog_index(request):
-    contractors = Contractor.objects.all().order_by('-created_on')
+def contractor_index(request):
+    contractors = Contractor.objects.all().order_by('-startDate')
     context = {
         "contractors": contractors,
     }
     return render(request, "contractor_index.html", context)
+
+
+def contractor_detail(request, contractor):
+    drivers = Driver.objects.filter(
+        contractor__name__contains=contractor
+    ).order_by(
+        '-startDate'
+    )
+    context = {
+        "contractor": contractor,
+        'drivers': drivers
+    }
+    return render(request, 'contractor_detail.html', context)
+
+
+def add_driver(request, pk):
+    contractor = Contractor.objects.get(pk=pk)
+    drivers = Driver.objects.filter(contractor=contractor)
+    context = {
+        "contractor": contractor,
+        'drivers': drivers
+    }
+    return render(request, 'add_driver.html', context)
