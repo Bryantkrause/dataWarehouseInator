@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from drivers.models import Driver, Contractor
+from .forms import DriverForm
 
 
 def driver_index(request):
@@ -42,6 +43,19 @@ def contractor_detail(request, contractor):
 def add_driver(request, pk):
     contractor = Contractor.objects.get(pk=pk)
     drivers = Driver.objects.filter(contractor=contractor)
+
+    form = DriverForm()
+    if request.method == 'POST':
+        form = DriverForm(request.POST)
+        if form.is_valid():
+            driver = Driver(
+                driverCliNumber=form.cleaned_data["driverCliNumber"],
+                driverType=form.cleaned_data["driverType"],
+                contractor=contractor
+            )
+
+
+
     context = {
         "contractor": contractor,
         'drivers': drivers
