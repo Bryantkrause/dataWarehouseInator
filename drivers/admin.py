@@ -3,13 +3,13 @@ from drivers.models import Driver, Contractor
 # Register your models here.
 
 
-class DriverAdmin(admin.ModelAdmin):
-    pass
+# class DriverAdmin(admin.ModelAdmin):
+#     pass
 
 
-class ContractorAdmin(admin.ModelAdmin):
-    pass
+# class ContractorAdmin(admin.ModelAdmin):
+#     pass
 
 
-admin.site.register(Driver, DriverAdmin)
-admin.site.register(Contractor, ContractorAdmin)
+# admin.site.register(Driver, DriverAdmin)
+# admin.site.register(Contractor, ContractorAdmin)
