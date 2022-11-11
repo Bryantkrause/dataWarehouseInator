@@ -29,7 +29,10 @@
                 <h5 class="card-title">CLI Number: {{ driver.driverCliNumber }}</h5>
                 <h5 class="card-title">Start Date: {{ driver.startDate }}</h5>
                 <h5 class="card-title">Registration Expires: {{ driver.RegistrationExpires }}</h5>
-                <p class="card-text">License Expires: {{ driver.licenseNumber }}</p>
+                <p class="card-text">License Number: {{ driver.licenseNumber }}</p>
+                <a href="{% url 'driver_detail' driver.pk %}"{{driver.pk}} class="btn btn-primary">
+                    {% url 'driver_detail' driver.pk %}
+                </a>
             </div>
         </div>
     </div>

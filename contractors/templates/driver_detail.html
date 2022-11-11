@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_content %}
+<h1>{{ driver.title }}</h1>
+<div class="row">
+    <div class="col-md-8">
+        <img src="{% static driver.image %}" alt="" width="100%">
+    </div>
+    <div class="col-md-4">
+        <h5>About the Driver:</h5>
+        <p>CLI Number: {{ driver.driverCliNumber }}</p>
+        <p>Driver Type: {{ driver.driverType }}</p>
+        <p>First Name: {{ driver.firstName }}</p>
+        <p>Last Name: {{ driver.LastName }}</p>
+        <p>Home Phone: {{ driver.homePhone }}</p>
+        <p>Cell Phone: {{ driver.cellPhone }}</p>
+        <p>Start Date: {{ driver.startDate }}</p>
+        <p>Registration Expires :{{ driver.RegistrationExpires }}</p>
+        <p>Terminated Status: {{ driver.terminated }}</p>
+        <p>Terminated Date: {{ driver.terminatedDate }}</p>
+        <p>License Number: {{ driver.licenseNumber }}</p>
+
+    </div>
+</div>
+{% endblock %}

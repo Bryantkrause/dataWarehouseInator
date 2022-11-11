@@ -23,3 +23,10 @@ def contractor_detail(request, pk):
     }
     return render(request, 'contractor_detail.html', context)
 
+
+def driver_detail(request, pk):
+    driver = Driver.objects.get(pk=pk)
+    context = {
+        'driver': driver
+    }
+    return render(request, 'driver_detail.html', context)
