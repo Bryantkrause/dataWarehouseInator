@@ -2,6 +2,21 @@
 {% load static %}
 {% block page_content %}
 
+<h1>{{ contractor.contractorBusinessName }}</h1>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-2">
+           
+            <div class="card-body">
+                <h5 class="card-title">First Name: {{ contractor.firstName }}</h5>
+                <h5 class="card-title">Last Name: {{ contractor.LastName }}</h5>
+                <h5 class="card-title">Start Date: {{ contractor.startDate }}</h5>
+                <h5 class="card-title">Address: {{ contractor.address_id }}</h5>
+                <p class="card-text">Last updated: {{ contractor.last_modified }}</p>
+            </div>
+        </div>
+    </div>
+</div>
 <h1>Drivers</h1>
 <div class="row">
     {% for driver in drivers%}
@@ -15,9 +30,6 @@
                 <h5 class="card-title">Start Date: {{ driver.startDate }}</h5>
                 <h5 class="card-title">Registration Expires: {{ driver.RegistrationExpires }}</h5>
                 <p class="card-text">License Expires: {{ driver.licenseNumber }}</p>
-                <a href="{% url 'driver_detail' driver.pk %}" class="btn btn-primary">
-                    Read More
-                </a>
             </div>
         </div>
     </div>

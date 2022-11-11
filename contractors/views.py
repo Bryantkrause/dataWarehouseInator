@@ -12,14 +12,14 @@ def contractor_index(request):
     return render(request, "contractor_index.html", context)
 
 
-def contractor_detail(request, contractor):
+def contractor_detail(request, pk):
+    contractor = Contractor.objects.get(pk=pk)
     drivers = Driver.objects.filter(
-        contractor__name__contains=contractor
-    ).order_by(
-        '-startDate'
+        contractorBusiness=pk
     )
     context = {
-        "contractor": contractor,
+        'contractor': contractor,
         'drivers': drivers
     }
     return render(request, 'contractor_detail.html', context)
+
