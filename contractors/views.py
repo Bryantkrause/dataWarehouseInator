@@ -27,6 +27,7 @@ def contractor_detail(request, pk):
 
 
 def driver_detail(request, pk):
+
     driver = Driver.objects.get(pk=pk)
     context = {
         'driver': driver

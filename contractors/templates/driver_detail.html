@@ -4,11 +4,11 @@
 {% block page_content %}
 <h1>{{ driver.title }}</h1>
 <div class="row">
-    <div class="col-md-8">
-        <img src="{% static driver.image %}" alt="" width="100%">
-    </div>
-    <div class="col-md-4">
-        <h5>About the Driver:</h5>
+    
+        <h1>About the Driver:</h1>
+        <div class="container">
+            <div class="row">
+                <div class="col">
         <p>CLI Number: {{ driver.driverCliNumber }}</p>
         <p>Driver Type: {{ driver.driverType }}</p>
         <p>First Name: {{ driver.firstName }}</p>
@@ -22,5 +22,25 @@
         <p>License Number: {{ driver.licenseNumber }}</p>
 
     </div>
+    <div class="col">
+                <p>Street Number: {{ driver.address_id.addressNumber }}</p>
+                <p>Street: {{ driver.address_id.addressLocation }}</p>
+                <p>City: {{ driver.address_id.city }}</p>
+                <p>State: {{ driver.address_id.state }}</p>
+                <p>Zip: {{ driver.address_id.zip }}</p>
+    </div>
+    
+
+</div>
+</br>
+<div>
+<h2>Vehicle Information</h2>
+<p>Vehicle Type: {{ driver.vehicle_id.vehicleType }}</p>
+<p>Year: {{ driver.vehicle_id.vehicleYear }}</p>
+<p>Vehicle Make: {{ driver.vehicle_id.vehicleMake }}</p>
+<p>VinNumber: {{ driver.vehicle_id.vinNumber }}</p>
+<p>License Plate: {{ driver.vehicle_id.licensePlate }}</p>
+<p>Combined Vehicle Weight: {{ driver.vehicle_id.combinedVehicleWeight }}</p>
+<p>Registration Exires: {{ driver.vehicle_id.registrationExires }}</p>
 </div>
 {% endblock %}

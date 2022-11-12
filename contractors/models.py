@@ -43,17 +43,17 @@ class Driver(models.Model):
     licenseClass = models.CharField(max_length=13)
     last_modified = models.DateTimeField(auto_now=True)
     address_id = models.ForeignKey(
-        'Address', on_delete=models.CASCADE
+        'Address', on_delete=models.CASCADE, default=None
+    )
+    vehicle_id = models.ForeignKey(
+        'Vehicle', on_delete=models.CASCADE, default=None
     )
 
     def __str__(self):
-        return self.driverCliNumber
+        return self.firstName
 
 
 class Vehicle(models.Model):
-    driver_id = models.ForeignKey(
-        'Driver', on_delete=models.CASCADE
-    )
     vehicleType = models.CharField(max_length=100)
     vehicleYear = models.IntegerField()
     vehicleMake = models.CharField(max_length=100)
@@ -74,4 +74,4 @@ class Address(models.Model):
     zip = models.CharField(max_length=100, default='12345')
 
     def __str__(self):
-        return self.addressNumber + ' ' + self.addressLocation
+        return self.addressNumber + ' ' + self.addressLocation + " \n\n " + self.city + ' ' + self.state + ' ' + self.zip
