@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from contractors.models import Driver, Contractor
+from contractors.models import Driver, Contractor, Vehicle, Address
 from .forms import DriverForm
 # Create your views here.
 
@@ -14,6 +14,8 @@ def contractor_index(request):
 
 def contractor_detail(request, pk):
     contractor = Contractor.objects.get(pk=pk)
+    
+
     drivers = Driver.objects.filter(
         contractorBusiness=pk
     )

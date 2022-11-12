@@ -3,6 +3,8 @@ from django.db import models
 # Create your models here.
 
 # https://realpython.com/get-started-with-django-1/ go here
+
+
 class Contractor(models.Model):
     startDate = models.DateField(default='2022-01-01')
     contractorBusinessName = models.CharField(
@@ -13,6 +15,9 @@ class Contractor(models.Model):
         'Address', on_delete=models.CASCADE
     )
     last_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.contractorBusinessName
 
 
 class Driver(models.Model):
@@ -41,6 +46,9 @@ class Driver(models.Model):
         'Address', on_delete=models.CASCADE
     )
 
+    def __str__(self):
+        return self.driverCliNumber
+
 
 class Vehicle(models.Model):
     driver_id = models.ForeignKey(
@@ -54,6 +62,9 @@ class Vehicle(models.Model):
     combinedVehicleWeight = models.IntegerField()
     registrationExires = models.DateField()
 
+    def __str__(self):
+        return self.vinNumber
+
 
 class Address(models.Model):
     addressNumber = models.CharField(max_length=100, default='123')
@@ -61,3 +72,6 @@ class Address(models.Model):
     city = models.CharField(max_length=100, default='Real City')
     state = models.CharField(max_length=100, default='CA')
     zip = models.CharField(max_length=100, default='12345')
+
+    def __str__(self):
+        return self.addressNumber + ' ' + self.addressLocation
