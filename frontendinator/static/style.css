@@ -1,0 +1,9 @@
+.container {
+    border:5px solid #cecece;
+    background-image: linear-gradient(red, blue)
+}
+
+body {
+    background-color: lightblue;
+    font-family: verdana;
+}
