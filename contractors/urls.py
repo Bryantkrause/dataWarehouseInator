@@ -7,3 +7,4 @@ urlpatterns = [
     path("driver_detail/<int:pk>",
          views.driver_detail, name="driver_detail"),
 ]
+# https://medium.com/@9cv9official/how-to-set-up-your-homepage-with-django-ae21f439c8a3
