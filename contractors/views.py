@@ -15,7 +15,6 @@ def contractor_index(request):
 def contractor_detail(request, pk):
     contractor = Contractor.objects.get(pk=pk)
     
-
     drivers = Driver.objects.filter(
         contractorBusiness=pk
     )
