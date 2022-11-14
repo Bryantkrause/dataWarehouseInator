@@ -1,17 +1,17 @@
 {% extends "base.html" %}
-{% load static %}
-{% block page_content %}
+
+{% block content %}
 {% if user.is_authenticated %}
 <h1>Contractors</h1>
 <div class="row">
     {% for contractor in contractors%}
     <div class="col-md-4">
         <div class="card mb-2">
-            <!-- <img class="card-img-top" src="{% static driver.image %}"> -->
+
             <div class="card-body">
                 <h5 class="card-title">Contractor Business Name: {{ contractor.contractorBusinessName }}</h5>
                 <h5 class="card-title">Start Date: {{ contractor.startDate }}</h5>
-                <a href="{% url 'app_name:contractor_detail' contractor.pk %}" class="btn btn-primary">
+                <a href="{% url 'contractors:contractor_detail' contractor.pk %}" class="btn btn-primary">
                     x
                 </a>
             </div>
