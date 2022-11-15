@@ -12,6 +12,14 @@ def contractor_index(request):
     return render(request, "contractor_index.html", context)
 
 
+def contractor_table(request):
+    contractors = Contractor.objects.all().order_by('-startDate')
+    context = {
+        "contractors": contractors,
+    }
+    return render(request, "contractor_table.html", context)
+
+
 def contractor_detail(request, pk):
     contractor = Contractor.objects.get(pk=pk)
     

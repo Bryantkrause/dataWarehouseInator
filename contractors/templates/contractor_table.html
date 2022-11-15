@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<h1>Contractors</h1>
+
+<table>
+    <tr>
+        <th>Contractor Name</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Start Date</th>
+        <th>Last Update</th>
+    </tr>
+    {% for contractor in contractors%}
+    <tr>
+        <td>{{ contractor.contractorBusinessName }}</td>
+        <td>{{ contractor.firstName }}</td>
+        <td>{{ contractor.lastName }}</td>
+        <td>{{ contractor.startDate }}</td>
+        <td>{{ contractor.last_modified }}</td>
+        <td><a href="{% url 'contractors:contractor_detail' contractor.pk %}" class="btn btn-primary">
+            {% url 'contractors:contractor_detail' contractor.pk %}
+        </a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% else %}
+<p>You are not logged in</p>
+<a href="{% url 'login' %}">Log In</a>
+{% endif %}
+{% endblock %}
