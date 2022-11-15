@@ -12,7 +12,7 @@
                 <h5 class="card-title">Contractor Business Name: {{ contractor.contractorBusinessName }}</h5>
                 <h5 class="card-title">Start Date: {{ contractor.startDate }}</h5>
                 <a href="{% url 'contractors:contractor_detail' contractor.pk %}" class="btn btn-primary">
-                    x
+                    {% url 'contractors:contractor_detail' contractor.pk %}
                 </a>
             </div>
         </div>
