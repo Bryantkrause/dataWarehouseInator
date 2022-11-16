@@ -50,8 +50,7 @@ def contractor_detailTable(request, pk):
 def driver_detail(request, pk):
 
     driver = Driver.objects.get(pk=pk)
-    print(driver.contractorBusiness.id)
-    contractor = Contractor.objects.get(pk=driver.contractorBusiness.id)
+
     context = {
         'driver': driver
     }

@@ -35,6 +35,10 @@
     
 
 </div>
+<h1>Update driver</h1>
+<a href="{% url 'contractors:driver_update' driver.pk %}" class="btn btn-primary">
+    {% url 'contractors:driver_update' driver.pk %}
+</a>
 </br>
 <div>
 <h2>Vehicle Information</h2>
@@ -47,9 +51,7 @@
 <p>Registration Exires: {{ driver.vehicle_id.registrationExires }}</p>
 </div>
 
-<h1>Update driver</h1>
 
-<a href="{% url 'contractors:driver_update' driver.pk %}" class="btn btn-primary">
-    {% url 'contractors:driver_update' driver.pk %}
-</a>
+
+
 {% endblock %}
