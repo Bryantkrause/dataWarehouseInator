@@ -10,5 +10,7 @@ urlpatterns = [
          name="contractor_detailTable"),
     path("driver_detail/<int:pk>",
          views.driver_detail, name="driver_detail"),
+    path("driver_update/<int:pk>/update",
+         views.driver_update, name="driver_update"),
 ]
 # https://medium.com/@9cv9official/how-to-set-up-your-homepage-with-django-ae21f439c8a3

@@ -51,7 +51,8 @@ class Driver(models.Model):
 
     def __str__(self):
         return self.firstName
-
+    def save(self):
+        super(Driver, self).save()
 
 class Vehicle(models.Model):
     vehicleType = models.CharField(max_length=100)

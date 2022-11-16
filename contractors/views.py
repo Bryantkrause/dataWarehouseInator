@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from contractors.models import Driver, Contractor, Vehicle, Address
-from .forms import DriverForm
+from contractors.forms import updateDriverForm
+
 # Create your views here.
 
 
@@ -53,3 +54,21 @@ def driver_detail(request, pk):
         'driver': driver
     }
     return render(request, 'driver_detail.html', context)
+
+
+def driver_update(request, pk):
+
+    if request.method == 'POST':
+        form = updateDriverForm(request.POST)
+        if form.is_valid():
+            send = form.save(commit=False)
+            send.save()
+    else:
+        form = updateDriverForm()
+    driver = Driver.objects.get(pk=pk)
+    context = {
+        'form': form,
+        'driver': driver
+    }
+    return render(request, 'driver_update.html', context)
+# https://stackoverflow.com/questions/57328114/how-can-i-display-database-data-on-a-django-form
