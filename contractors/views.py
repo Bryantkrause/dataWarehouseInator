@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from contractors.models import Driver, Contractor, Vehicle, Address
 from contractors.forms import updateDriverForm
 
@@ -50,6 +50,8 @@ def contractor_detailTable(request, pk):
 def driver_detail(request, pk):
 
     driver = Driver.objects.get(pk=pk)
+    print(driver.contractorBusiness.id)
+    contractor = Contractor.objects.get(pk=driver.contractorBusiness.id)
     context = {
         'driver': driver
     }
@@ -63,6 +65,7 @@ def driver_update(request, pk):
         form = updateDriverForm(request.POST, instance=driver)
         if form.is_valid():
             form.save()
+            return redirect(f'/contractors/driver_detail/{driver.pk}')
     else:
         form = updateDriverForm(instance=driver)
 

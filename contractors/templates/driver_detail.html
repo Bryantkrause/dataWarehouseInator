@@ -2,7 +2,10 @@
 
 
 {% block content %}
-<h1>{{ driver.title }}</h1>
+<h1>Contractor Business Name:{{ driver.contractorBusiness }}</h1>
+<a href="{% url 'contractors:contractor_detail' driver.contractorBusiness.id %}" class="btn btn-primary">
+    {% url 'contractors:contractor_detail' driver.contractorBusiness.id % }
+</a>
 <div class="row">
     
         <h1>About the Driver:</h1>

@@ -51,4 +51,6 @@ c3 = Contractor(
     addressLocation='abc1235',
     state='CA',
     zip='abc1235')
-    
+
+<a href = "{% url 'contractors:contractor_detail' contractor.pk %}" class = "btn btn-primary" >
+{% url 'contractors:contractor_detail' contractor.pk % }
