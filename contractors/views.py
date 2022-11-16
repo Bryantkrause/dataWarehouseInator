@@ -57,15 +57,15 @@ def driver_detail(request, pk):
 
 
 def driver_update(request, pk):
-
-    if request.method == 'POST':
-        form = updateDriverForm(request.POST)
-        if form.is_valid():
-            send = form.save(commit=False)
-            send.save()
-    else:
-        form = updateDriverForm()
     driver = Driver.objects.get(pk=pk)
+    print(request.method)
+    if request.method == 'POST':
+        form = updateDriverForm(request.POST, instance=driver)
+        if form.is_valid():
+            form.save()
+    else:
+        form = updateDriverForm(instance=driver)
+
     context = {
         'form': form,
         'driver': driver
