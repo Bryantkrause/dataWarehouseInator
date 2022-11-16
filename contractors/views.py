@@ -22,7 +22,7 @@ def contractor_table(request):
 
 def contractor_detail(request, pk):
     contractor = Contractor.objects.get(pk=pk)
-    
+
     drivers = Driver.objects.filter(
         contractorBusiness=pk
     )
@@ -31,6 +31,19 @@ def contractor_detail(request, pk):
         'drivers': drivers
     }
     return render(request, 'contractor_detail.html', context)
+
+
+def contractor_detailTable(request, pk):
+    contractor = Contractor.objects.get(pk=pk)
+
+    drivers = Driver.objects.filter(
+        contractorBusiness=pk
+    )
+    context = {
+        'contractor': contractor,
+        'drivers': drivers
+    }
+    return render(request, 'contractor_detailTable.html', context)
 
 
 def driver_detail(request, pk):

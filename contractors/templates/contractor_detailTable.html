@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<h1>{{ contractor.contractorBusinessName }}</h1>
+
+<table>
+    <tr>
+        <th>Contractor Name</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Start Date</th>
+        <th>Street Address</th>
+        <th>City & State</th>
+        <th>Zip</th>
+        <th>Start Date</th>
+        <th>Last Update</th>
+    </tr>
+    <tr>
+        <td>{{ contractor.contractorBusinessName }}</td>
+        <td>{{ contractor.firstName }}</td>
+        <td>{{ contractor.lastName }}</td>
+        <td>{{ contractor.startDate }}</td>
+        <td>{{ contractor.address_id.addressNumber }} {{ contractor.address_id.addressLocation }}</td>
+        <td>{{ contractor.address_id.city }} {{contractor.address_id.state }}</td>
+        <td>{{contractor.address_id.zip }}</td>
+        <td>{{contractor.last_modified }}</td>
+    </tr>
+</table>
+<h1>Drivers</h1>
+<table>
+    <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>CLI Number:</th>
+        <th>Start Date</th>
+        <th>Registration Expires</th>
+        <th>License Number</th>
+    </tr>
+    {% for driver in drivers%}
+    <tr>
+        <td>{{ driver.firstName }}</td>
+        <td>{{ driver.lastName }}</td>
+        <td>{{ driver.driverCliNumber }}</td>
+        <td>{{ driver.startDate }}</td>
+        <td>{{ driver.RegistrationExpires }}</td>
+        <td>{{ driver.licenseNumber }}</td>
+        <td><a href="{% url 'contractors:driver_detail' driver.pk %}" {{driver.pk}} class="btn btn-primary">
+            {% url 'contractors:driver_detail' driver.pk %}
+        </a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+{% else %}
+<p>You are not logged in</p>
+<a href="{% url 'login' %}">Log In</a>
+{% endif %}
+{% endblock %}
