@@ -5,6 +5,7 @@ app_name = 'contractors'
 urlpatterns = [
     path("", views.contractor_index, name="contractor_index"),
     path("add/", views.contractor_add, name="contractor_add"),
+    path("driver_add/<int:pk>/", views.driver_add, name="driver_add"),
     path("<int:pk>/", views.contractor_detail, name="contractor_detail"),
     path("table/", views.contractor_table, name="contractor_table"),
     path("detailtable/<int:pk>", views.contractor_detailTable,

@@ -70,6 +70,18 @@ def contractor_add(request):
     return render(request, "contractor_add.html", {'form': form})
 
 
+def driver_add(request, pk):
+    contractor = Contractor.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = updateDriverForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(f'/contractors/{contractor.pk}')
+    else:
+        form = updateDriverForm()
+    return render(request, "driver_add.html", {'form': form})
+
+
 def driver_update(request, pk):
     driver = Driver.objects.get(pk=pk)
     print(request.method)

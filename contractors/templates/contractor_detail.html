@@ -3,10 +3,16 @@
 {% block content %}
 {% load crispy_forms_tags %}
 <h1>{{ contractor.contractorBusinessName }}</h1>
+                <a href="/contractors" class="btn btn-primary">
+                    Contractors
+                </a>
+<br>
+<div>
+    Hello
+</div>
 <div class="row">
     <div class="col-md-4">
         <div class="card mb-2">
-           
             <div class="card-body">
                 <h5 class="card-title">First Name: {{ contractor.firstName }}</h5>
                 <h5 class="card-title">Last Name: {{ contractor.lastName }}</h5>
@@ -31,12 +37,17 @@
                 <h5 class="card-title">Start Date: {{ driver.startDate }}</h5>
                 <h5 class="card-title">Registration Expires: {{ driver.RegistrationExpires }}</h5>
                 <p class="card-text">License Number: {{ driver.licenseNumber }}</p>
-                <a href="{% url 'contractors:driver_detail' driver.pk %}"{{driver.pk}} class="btn btn-primary">
+                <a href="{% url 'contractors:driver_detail' driver.pk %}"class="btn btn-primary">
                     {% url 'contractors:driver_detail' driver.pk %}
                 </a>
             </div>
         </div>
     </div>
     {% endfor %}
+</div>
+<div class="container">
+    <a href="{% url 'contractors:driver_add' contractor.pk%}" class="btn btn-primary">
+        {% url 'contractors:driver_add' contractor.pk%}
+
 </div>
 {% endblock %}
