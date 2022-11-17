@@ -21,7 +21,7 @@ class DriverForm(forms.Form):
 class ContractorForm(forms.ModelForm):
 
     class Meta:
-        model = Driver
+        model = Contractor
         fields = '__all__'
 
     def save(self, commit=True):
@@ -29,6 +29,7 @@ class ContractorForm(forms.ModelForm):
         if commit:
             send.save()
         return send
+
 
 class updateDriverForm(forms.ModelForm):
 

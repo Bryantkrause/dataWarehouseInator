@@ -19,6 +19,9 @@ class Contractor(models.Model):
     def __str__(self):
         return self.contractorBusinessName
 
+    def save(self):
+        super(Contractor, self).save()
+
 
 class Driver(models.Model):
     driverCliNumber = models.IntegerField(primary_key=True)
@@ -51,8 +54,10 @@ class Driver(models.Model):
 
     def __str__(self):
         return self.firstName
+
     def save(self):
         super(Driver, self).save()
+
 
 class Vehicle(models.Model):
     vehicleType = models.CharField(max_length=100)

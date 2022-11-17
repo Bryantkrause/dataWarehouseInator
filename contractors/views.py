@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from contractors.models import Driver, Contractor, Vehicle, Address
-from contractors.forms import updateDriverForm
+from contractors.forms import updateDriverForm, ContractorForm
 
 # Create your views here.
 
@@ -56,8 +56,18 @@ def driver_detail(request, pk):
     }
     return render(request, 'driver_detail.html', context)
 
-# def driver_add(request, pk):
-#     contractor = Contractor.objects.get(pk=pk)
+
+def contractor_add(request):
+    # context = {}
+    if request.method == 'POST':
+        form = ContractorForm(request.POST or None)
+        if form.is_valid():
+            form.save()
+            return redirect(f'/contractors')
+    # context['form'] = form
+    else:
+        form = ContractorForm()
+    return render(request, "contractor_add.html", {'form': form})
 
 
 def driver_update(request, pk):
