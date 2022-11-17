@@ -56,6 +56,9 @@ def driver_detail(request, pk):
     }
     return render(request, 'driver_detail.html', context)
 
+# def driver_add(request, pk):
+#     contractor = Contractor.objects.get(pk=pk)
+
 
 def driver_update(request, pk):
     driver = Driver.objects.get(pk=pk)

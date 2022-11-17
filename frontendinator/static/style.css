@@ -1,9 +1,13 @@
 .container {
     border:5px solid #cecece;
-    background-image: linear-gradient(red, blue)
+    background-image: linear-gradient(#B1D4E0, White)
 }
 
 body {
     background-color: lightblue;
     font-family: verdana;
+}
+.navbar{
+background:#008585
+
 }

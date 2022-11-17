@@ -18,6 +18,18 @@ class DriverForm(forms.Form):
     )
 
 
+class ContractorForm(forms.ModelForm):
+
+    class Meta:
+        model = Driver
+        fields = '__all__'
+
+    def save(self, commit=True):
+        send = super(ContractorForm,  self)
+        if commit:
+            send.save()
+        return send
+
 class updateDriverForm(forms.ModelForm):
 
     class Meta:

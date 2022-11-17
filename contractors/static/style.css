@@ -1,5 +1,8 @@
-
 .container {
-    border:5px solid #cecece;
-    background-image: linear-gradient(red, blue)
+    border: 5px solid #cecece;
+    background-image: linear-gradient(#B1D4E0, #2E8BC0)
+}
+
+.card-body {
+    background-image: linear-gradient( #2E8BC0,#B1D4E0)
 }
