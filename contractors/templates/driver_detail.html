@@ -3,8 +3,8 @@
 
 {% block content %}
 <h1>Contractor Business Name:{{ driver.contractorBusiness }}</h1>
-<a href="{% url 'contractors:contractor_detail' driver.contractorBusiness.id %}" class="btn btn-primary">
-    {% url 'contractors:contractor_detail' driver.contractorBusiness.id % }
+<a href="{% url 'contractors:contractor_detail' driver.contractorBusiness.id %}" class="btn btn-dark">
+    Go back to {{driver.contractorBusiness}} detail
 </a>
 <div class="row">
     
@@ -36,8 +36,8 @@
 
 </div>
 <h1>Update driver</h1>
-<a href="{% url 'contractors:driver_update' driver.pk %}" class="btn btn-primary">
-    {% url 'contractors:driver_update' driver.pk %}
+<a href="{% url 'contractors:driver_update' driver.pk %}" class="btn btn-dark">
+    Update driver detail
 </a>
 </br>
 <div>

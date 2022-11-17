@@ -3,7 +3,7 @@
 {% block content %}
 {% load crispy_forms_tags %}
 <h1>{{ contractor.contractorBusinessName }}</h1>
-                <a href="/contractors" class="btn btn-primary">
+                <a href="/contractors" class="btn btn-dark">
                     Contractors
                 </a>
 <br>
@@ -37,17 +37,17 @@
                 <h5 class="card-title">Start Date: {{ driver.startDate }}</h5>
                 <h5 class="card-title">Registration Expires: {{ driver.RegistrationExpires }}</h5>
                 <p class="card-text">License Number: {{ driver.licenseNumber }}</p>
-                <a href="{% url 'contractors:driver_detail' driver.pk %}"class="btn btn-primary">
-                    {% url 'contractors:driver_detail' driver.pk %}
+                <a href="{% url 'contractors:driver_detail' driver.pk %}"class="btn btn-dark">
+                    View Driver Detail
                 </a>
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
-<div class="container">
-    <a href="{% url 'contractors:driver_add' contractor.pk%}" class="btn btn-primary">
-        {% url 'contractors:driver_add' contractor.pk%}
-
+<div class="card-body">
+    <a href="{% url 'contractors:driver_add' contractor.pk%}" class="btn btn-dark">
+        Add A Driver
+</a>
 </div>
 {% endblock %}

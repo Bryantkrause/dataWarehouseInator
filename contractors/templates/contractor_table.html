@@ -19,8 +19,8 @@
         <td>{{ contractor.lastName }}</td>
         <td>{{ contractor.startDate }}</td>
         <td>{{ contractor.last_modified }}</td>
-        <td><a href="{% url 'contractors:contractor_detailTable' contractor.pk %}" class="btn btn-primary">
-            {% url 'contractors:contractor_detailTable' contractor.pk %}
+        <td><a href="{% url 'contractors:contractor_detailTable' contractor.pk %}" class="btn btn-dark">
+            View Contractor Data
         </a></td>
     </tr>
     {% endfor %}

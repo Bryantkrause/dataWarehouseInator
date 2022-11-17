@@ -1,16 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<p>Hello world!</p>
+<h1>Welcome to the Future</h1>
 {% if user.is_authenticated %}
-                <a href="/contractors" class="btn btn-primary">
-                    Contractors
-                </a>
-                <a href="{% url 'contractors:contractor_table' %}" class="btn btn-primary">
-                    {% url 'contractors:contractor_table' %}
-                </a></td>
+<div class="container2">
+    <div class="row">
+        <div class="col-md-4">
+        <div class="card-body">
+                <h3>View Contractor Data</h3>
+                    <a href="/contractors" class="btn btn-dark">
+                        Contractors
+                    </a>
+                    <a href="{% url 'contractors:contractor_table' %}" class="btn btn-dark">
+                        Contractors as a Table
+                    </a></td>
+                </div>
+                </div>
+            </div>
+    </div>
 {% else %}
 <p>You are not logged in</p>
+<div class="card-body">
 <a href="/login">Log In</a>
+</div>
 {% endif %}
 {% endblock %}

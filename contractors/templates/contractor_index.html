@@ -5,12 +5,15 @@
 
 <h1>Contractors</h1>
 
-<div class="row">
-<a href="{% url 'contractors:contractor_add' %}" class="btn btn-primary">
-    {% url 'contractors:contractor_add'  %}
+<div class="container2">
+<a href="{% url 'contractors:contractor_add' %}" class="btn btn-dark">
+      Add Contractor
 </a>
 </div>
 <br>
+<div class="row">
+
+</div>
 <div class="row">
     {% for contractor in contractors%}
     <div class="col-md-4">
@@ -19,8 +22,8 @@
             <div class="card-body">
                 <h5 class="card-title">Contractor Business Name: {{ contractor.contractorBusinessName }}</h5>
                 <h5 class="card-title">Start Date: {{ contractor.startDate }}</h5>
-                <a href="{% url 'contractors:contractor_detail' contractor.pk %}" class="btn btn-primary">
-                    {% url 'contractors:contractor_detail' contractor.pk %}
+                <a href="{% url 'contractors:contractor_detail' contractor.pk %}" class="btn btn-dark">
+                    View Contractor Data
                 </a>
             </div>
         </div>

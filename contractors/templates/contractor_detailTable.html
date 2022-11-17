@@ -45,8 +45,8 @@
         <td>{{ driver.startDate }}</td>
         <td>{{ driver.RegistrationExpires }}</td>
         <td>{{ driver.licenseNumber }}</td>
-        <td><a href="{% url 'contractors:driver_detail' driver.pk %}" {{driver.pk}} class="btn btn-primary">
-            {% url 'contractors:driver_detail' driver.pk %}
+        <td><a href="{% url 'contractors:driver_detail' driver.pk %}" {{driver.pk}} class="btn btn-dark">
+            View Driver Detail
         </a></td>
     </tr>
     {% endfor %}
