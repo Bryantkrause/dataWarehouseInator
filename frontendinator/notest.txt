@@ -1,0 +1,23 @@
+need turnover for drivers
+separate active and inactive drivers
+
+home page: 
+    show active drivers
+    show by class
+
+insurance:
+    each vehicle for a contractor business is associated with an insurance contractor
+
+add shift type for drivers:
+    night
+    day
+
+vehicle type:
+    tractor
+    bobtail
+    yardgoat
+
+create employee views
+
+Will need all social but only display last 4
+    need security thingies
