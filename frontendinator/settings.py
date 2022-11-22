@@ -87,12 +87,13 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     },
+
     'expense': {
         'NAME': 'datawarehouse',
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'root',
         'PASSWORD': pw,
-    },
+    }
 }
 
 
