@@ -88,8 +88,15 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     },
 
-    'datawarehouse': {
-        'NAME': 'rawdata',
+    'expense': {
+        'NAME': 'rawdataexpense',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'root',
+        'PASSWORD': pw,
+    },
+
+    'labor': {
+        'NAME': 'rawdatalabor',
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'root',
         'PASSWORD': pw,
@@ -142,4 +149,5 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 DATABASE_ROUTERS = [
-    'frontendinator\routes\routes.py\AuthRouter', 'frontendinator\routes\routes.py\UsersRouter']
+    'frontendinator.routes.routes.py\AuthRouter', 'frontendinator\routes\routes.py\UsersRouter']
+# https://blog.devgenius.io/multiple-databases-in-django-925ca821bdd0
