@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'contractors',
     'main',
     'crispy_forms',
+    'expensinator',
+    'laborinator',
 
 ]
 
@@ -88,15 +90,15 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     },
 
-    'expense': {
-        'NAME': 'rawdataexpense',
+    'expensedb': {
+        'NAME': 'expensedb',
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'root',
         'PASSWORD': pw,
     },
 
-    'labor': {
-        'NAME': 'rawdatalabor',
+    'labordb': {
+        'NAME': 'labordb',
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'root',
         'PASSWORD': pw,
@@ -148,6 +150,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-DATABASE_ROUTERS = [
-    'frontendinator.routes.routes.py\AuthRouter', 'frontendinator\routes\routes.py\UsersRouter']
+DATABASE_ROUTERS = ['frontendinator.router.router.ExpenseRouter']
 # https://blog.devgenius.io/multiple-databases-in-django-925ca821bdd0
